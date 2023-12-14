@@ -1,0 +1,72 @@
+<!-- listeTelevisions.ejs -->
+<head>
+  <meta charset="UTF-8">
+  <title>HenniList</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Televisions lists</h1>
+<h2>Bought televisions</h2>
+
+<div class="code-container">
+  <table>
+      <thead>
+          <tr>
+              <th>Model</th>
+              <th>Price</th>
+              <th>Size</th>
+              <th>Etat</th>
+          </tr>
+      </thead>
+      <tbody>
+          <% for (television of wishlist) { %>
+              <tr>
+                  <td><%= television.Model %></td>
+                  <td><%= television.Price %></td>
+                  <td><%= television.Size %></td>
+                  <td><%= television.Etat %></td>
+              </tr>
+          <% } %>
+      </tbody>
+  </table>
+</div>
+
+<h2>Wishlist</h2>
+
+<div class="code-container">
+  <table>
+      <thead>
+          <tr>
+              <th>Model</th>
+              <th>Price</th>
+              <th>Size</th>
+              <th>Etat</th>
+              <th> UPDATE </th>
+          </tr>
+      </thead>
+      <tbody>
+          <% for (television of possessList) { %>
+              <tr data-television-id="<%= television.id %>">
+                  <td><%= television.Model %></td>
+                  <td><%= television.Price %></td>
+                  <td><%= television.Size %></td>
+                  <td><%= television.Etat %></td>
+                  <td class="update-button" data-television-id="<%= television.id %>">I Bought It !</td>
+                </tr>
+              </tr>
+          <% } %>
+      </tbody>
+  </table>
+</div>
+
+<br>
+<br>
+<p>Le montant total dépensé en télévisions est de <%= totalAmount %>€</p>
+<br>
+<br>
+
+<form action="/add" method="POST">
+  <input name="television" />
+  <input type="submit" />
+</form>
+</body>

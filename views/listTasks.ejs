@@ -1,0 +1,10 @@
+<h1>Todo list</h1>
+<ul>
+  <% for(television of wishlist) { %>
+    <li><%= television.Model %></li>
+  <% } %>
+</ul>
+<form action="/add" method="POST">
+  <input name="task" />
+  <input type="submit" />
+</form>
