@@ -150,21 +150,52 @@ export default class Model {
   }
 
   /**
+ * Save (INSERT/UPDATE) the record in the database
+ * @returns {Promise<void>}
+ */
+async save() {
+  if (!('table' in this.constructor) || !this.constructor.table) {
+    throw new Error("You need to specify a table");
+  }
+  if (this._isNew) {
+    const fields = Object.keys(this._payload);
+    let query = `INSERT INTO ${this.constructor.table} (${fields.join(', ')})`;
+    query += ` VALUES (${fields.map(_ => '?').join(', ')})`
+    const values = fields.map(field => this[field]);
+    await connection.execute(query, values);
+  } else {
+    const fields = Object.keys(this._payload);
+    const setClause = fields.map(field => `${field} = ?`).join(', ');
+    const query = `UPDATE ${this.constructor.table} SET ${setClause} WHERE id = ?`;
+    const values = fields.map(field => this[field]);
+    values.push(this._primaryKey.id); // Assurez-vous que _primaryKey contient l'objet avec une propriété id
+    await connection.execute(query, values);
+    
+  }
+}
+
+
+
+
+
+/*
    * Save (INSERT/UPDATE) the record in the database
    * @returns {Promise<void>}
    */
-  async save() {
-    if (!('table' in this.constructor) || !this.constructor.table) {
-      throw new Error("You need to specify a table");
-    }
-    if (this._isNew) {
-      const fields = Object.keys(this._payload);
-      let query = `INSERT INTO ${this.constructor.table} (${fields.join(', ')})`;
-      query += ` VALUES (${fields.map(_ => '?').join(', ')})`
-      const values = fields.map(field => this[field]);
-      await connection.execute(query, values);
-    } else {
-      await query(`UPDATE ${this.constructor.table}`, this._payload, this._primaryKey);
-    }
+ /* 
+async save() {
+  if (!('table' in this.constructor) || !this.constructor.table) {
+    throw new Error("You need to specify a table");
   }
+  if (this._isNew) {
+    const fields = Object.keys(this._payload);
+    let query = `INSERT INTO ${this.constructor.table} (${fields.join(', ')})`;
+    query += ` VALUES (${fields.map(_ => '?').join(', ')})`
+    const values = fields.map(field => this[field]);
+    await connection.execute(query, values);
+  } else {
+    await query(`UPDATE ${this.constructor.table}`, this._payload, this._primaryKey);
+  }
+}
+*/
 }
