@@ -16,15 +16,17 @@
               <th>Price</th>
               <th>Size</th>
               <th>Etat</th>
+              <th>Destruction</th>
           </tr>
       </thead>
       <tbody>
-          <% for (television of wishlist) { %>
+          <% for (television of possessList) { %>
               <tr>
                   <td><%= television.Model %></td>
                   <td><%= television.Price %></td>
                   <td><%= television.Size %></td>
                   <td><%= television.Etat %></td>
+                  <td><a href="/destroy/<%= television.id %>">Détruire</a></td>
               </tr>
           <% } %>
       </tbody>
@@ -45,13 +47,13 @@
           </tr>
       </thead>
       <tbody>
-          <% for (television of possessList) { %>
+          <% for (television of wishlist) { %>
               <tr data-television-id="<%= television.id %>">
                   <td><%= television.Model %></td>
                   <td><%= television.Price %></td>
                   <td><%= television.Size %></td>
                   <td><%= television.Etat %></td>
-                  <td class="update-button" data-television-id="<%= television.id %>">I Bought It !</td>
+                  <td><a href="/buy/<%= television.id %>">I bought it !</a></td>
                 </tr>
               </tr>
           <% } %>
@@ -64,9 +66,12 @@
 <p>Le montant total dépensé en télévisions est de <%= totalAmount %>€</p>
 <br>
 <br>
-
+<p>Ajouter une nouvelle télévision à la wishlist</p>
 <form action="/add" method="POST">
-  <input name="television" />
+  <input name="Model" placeholder="Model" /> 
+  <input name="Price" placeholder="Price" type ="number"/> 
+  <input name = "Size" placeholder="Size" type ="number"/>
+
   <input type="submit" />
 </form>
 </body>
